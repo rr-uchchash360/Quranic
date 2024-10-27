@@ -16,6 +16,9 @@ class _InputScreenState extends State<InputScreen> {
   final TextEditingController _ayahController = TextEditingController();
   bool _isLoading = false;
 
+  bool _showEnglish = true;
+  bool _showBangla = true;
+
   final QuranViewModel _viewModel = QuranViewModel();
 
   bool _validateInputs() {
@@ -101,6 +104,38 @@ class _InputScreenState extends State<InputScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Text("Show English"),
+                      CupertinoSwitch(
+                        value: _showEnglish,
+                        onChanged: (value) {
+                          setState(() {
+                            _showEnglish = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      Text("Show Bangla"),
+                      CupertinoSwitch(
+                        value: _showBangla,
+                        onChanged: (value) {
+                          setState(() {
+                            _showBangla = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               SizedBox(height: 30),
               _isLoading
                   ? CupertinoActivityIndicator(radius: 15)
@@ -129,6 +164,8 @@ class _InputScreenState extends State<InputScreen> {
                                   bangla: result['bangla']!,
                                   surahNumber: int.parse(_surahController.text),
                                   ayahNumber: int.parse(_ayahController.text),
+                                  showEnglish: _showEnglish,
+                                  showBangla: _showBangla,
                                 ),
                               ),
                             );
