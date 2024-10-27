@@ -9,6 +9,7 @@ import 'dart:typed_data';
 class ResultScreen extends StatelessWidget {
   final String arabic;
   final String english;
+  final String bangla;
   final int surahNumber;
   final int ayahNumber;
 
@@ -16,6 +17,7 @@ class ResultScreen extends StatelessWidget {
     Key? key,
     required this.arabic,
     required this.english,
+    required this.bangla,
     required this.surahNumber,
     required this.ayahNumber,
   }) : super(key: key);
@@ -28,17 +30,19 @@ class ResultScreen extends StatelessWidget {
 
       if (imageBytes != null) {
         await Share.shareXFiles(
-          [XFile.fromData(
-            imageBytes,
-            mimeType: 'image/png',
-            name: 'Quranic_$surahNumber$ayahNumber.png',
-          )],
+          [
+            XFile.fromData(
+              imageBytes,
+              mimeType: 'image/png',
+              name: 'Quranic_$surahNumber$ayahNumber.png',
+            )
+          ],
         );
       }
     } catch (e) {
-      print("Error sharing screenshot: $e");
+      print("Error sharing: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to capture image. Please try again.')),
+        SnackBar(content: Text('Failed to share image. Please try again.')),
       );
     }
   }
@@ -91,6 +95,26 @@ class ResultScreen extends StatelessWidget {
                         SizedBox(height: 15),
                         Text(
                           english,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Text(
+                          bangla,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Text(
+                          '∼ Al-Quran ($surahNumber:$ayahNumber)',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,

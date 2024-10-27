@@ -16,10 +16,12 @@ class QuranViewModel {
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         String arabic = json['arabic1'] ?? "No Arabic text available";
         String english = json['english'] ?? "No English translation available";
+        String bangla = json['bangla'] ?? "No Bengali translation available";
 
         return {
           'arabic': arabic,
           'english': english,
+          'bangla': bangla,
         };
       } else {
         return null;

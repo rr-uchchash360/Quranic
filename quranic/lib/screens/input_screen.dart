@@ -126,6 +126,7 @@ class _InputScreenState extends State<InputScreen> {
                                 builder: (context) => ResultScreen(
                                   arabic: result['arabic']!,
                                   english: result['english']!,
+                                  bangla: result['bangla']!,
                                   surahNumber: int.parse(_surahController.text),
                                   ayahNumber: int.parse(_ayahController.text),
                                 ),
