@@ -1,3 +1,5 @@
+// screens/input_screen.dart
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,6 +126,8 @@ class _InputScreenState extends State<InputScreen> {
                                 builder: (context) => ResultScreen(
                                   arabic: result['arabic']!,
                                   english: result['english']!,
+                                  surahNumber: int.parse(_surahController.text),
+                                  ayahNumber: int.parse(_ayahController.text),
                                 ),
                               ),
                             );
