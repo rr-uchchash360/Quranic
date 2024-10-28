@@ -14,14 +14,20 @@ class QuranViewModel {
 
       if (response.statusCode == 200) {
         var json = jsonDecode(utf8.decode(response.bodyBytes));
-        String arabic = json['arabic1'] ?? "No Arabic text available";
-        String english = json['english'] ?? "No English translation available";
-        String bangla = json['bangla'] ?? "No Bengali translation available";
+        String arabic = json['arabic1'] ?? "No Arabic text is available";
+        String english = json['english'] ?? "No English translation is available";
+        String bangla = json['bangla'] ?? "No Bengali translation is available";
+        String surahNameArabic = json['surahNameArabic'] ?? "No Arabic Surah name is available";
+        String surahNameTranslation = json['surahNameTranslation'] ?? "No Surah name translation is available";
+        String revelationPlace = json['revelationPlace'] ?? "No revelation place is available";
 
         return {
           'arabic': arabic,
           'english': english,
           'bangla': bangla,
+          'surahNameArabic': surahNameArabic,
+          'surahNameTranslation': surahNameTranslation,
+          'revelationPlace': revelationPlace,
         };
       } else {
         return null;

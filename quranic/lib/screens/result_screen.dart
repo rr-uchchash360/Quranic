@@ -1,5 +1,3 @@
-// result_screen.dart
-
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -20,6 +18,9 @@ class ResultScreen extends StatelessWidget {
   final bool showEnglish;
   final bool showBangla;
   final String watermarkText;
+  final String surahNameArabic;
+  final String surahNameTranslation;
+  final String revelationPlace;
 
   ResultScreen({
     Key? key,
@@ -31,6 +32,9 @@ class ResultScreen extends StatelessWidget {
     this.showEnglish = true,
     this.showBangla = true,
     this.watermarkText = 'Made this with Quranic',
+    required this.surahNameArabic,
+    required this.surahNameTranslation,
+    required this.revelationPlace,
   }) : super(key: key);
 
   final ScreenshotController screenshotController = ScreenshotController();
@@ -50,127 +54,201 @@ class ResultScreen extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          spreadRadius: 4,
-                          blurRadius: 10,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          arabic,
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                            fontFamily: 'Scheherazade',
-                          ),
-                        ),
-                        if (showEnglish) ...[
-                          const SizedBox(height: 15),
-                          Text(
-                            english,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                        if (showBangla) ...[
-                          const SizedBox(height: 15),
-                          Text(
-                            bangla,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: 20),
-                        Text(
-                          '∼ Al-Quran ($surahNumber:$ayahNumber)',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                'Preview Mode',
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontFamily: "Roboto",
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 50,
-              decoration: BoxDecoration(
-                color: CupertinoColors.activeGreen,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ElevatedButton(
-                onPressed: () => _shareAyahImage(context),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Row(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.share, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      'Share',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                  children: [
+                    _buildSurahNameSection(),
+                    const Spacer(flex: 1),
+                    _buildCenteredContent(),
+                    const Spacer(flex: 2),
                   ],
                 ),
               ),
             ),
           ),
+          _buildPreviewMode(),
+          _buildShareButton(context),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSurahNameSection() {
+    return Container(
+      margin: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.all(7),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                surahNameTranslation,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '•',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                surahNameArabic,
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontFamily: 'Scheherazade',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 1),
+          Text(
+            revelationPlace,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCenteredContent() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38,
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              arabic,
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: const TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+                fontFamily: 'Scheherazade',
+              ),
+            ),
+            if (showEnglish) ...[
+              const SizedBox(height: 15),
+              Text(
+                english,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+            if (showBangla) ...[
+              const SizedBox(height: 15),
+              Text(
+                bangla,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+            const SizedBox(height: 20),
+            Text(
+              '∼ Al-Quran ($surahNumber:$ayahNumber)',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white70,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPreviewMode() {
+    return Positioned(
+      bottom: 60,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: Text(
+          'Preview Mode',
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShareButton(BuildContext context) {
+    return Positioned(
+      bottom: 16,
+      right: 16,
+      child: ElevatedButton(
+        onPressed: () => _shareAyahImage(context),
+        style: ElevatedButton.styleFrom(
+          primary: CupertinoColors.activeGreen,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 4,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.ios_share_outlined, color: Colors.white),
+            SizedBox(width: 5),
+            Text(
+              'Share',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

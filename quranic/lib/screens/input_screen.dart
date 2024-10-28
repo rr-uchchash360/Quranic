@@ -166,6 +166,9 @@ class _InputScreenState extends State<InputScreen> {
                                   ayahNumber: int.parse(_ayahController.text),
                                   showEnglish: _showEnglish,
                                   showBangla: _showBangla,
+                                  surahNameArabic: result['surahNameArabic']!,
+                                  surahNameTranslation: result['surahNameTranslation']!,
+                                  revelationPlace: result['revelationPlace']!,
                                 ),
                               ),
                             );
