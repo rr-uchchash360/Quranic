@@ -1,3 +1,5 @@
+// result_screen.dart
+
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -55,12 +57,12 @@ class ResultScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 65),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildSurahNameSection(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _buildCenteredContent(),
                     const Spacer(flex: 2),
                   ],
@@ -69,7 +71,7 @@ class ResultScreen extends StatelessWidget {
             ),
           ),
           _buildPreviewMode(),
-          _buildShareButton(context),
+          _buildButtonRow(context),
         ],
       ),
     );
@@ -202,7 +204,7 @@ class ResultScreen extends StatelessWidget {
 
   Widget _buildPreviewMode() {
     return Positioned(
-      bottom: 60,
+      bottom: 65,
       left: 0,
       right: 0,
       child: Center(
@@ -219,31 +221,56 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildShareButton(BuildContext context) {
+  Widget _buildButtonRow(BuildContext context) {
     return Positioned(
-      bottom: 16,
-      right: 16,
-      child: ElevatedButton(
-        onPressed: () => _shareAyahImage(context),
-        style: ElevatedButton.styleFrom(
-          primary: CupertinoColors.activeGreen,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 4,
-        ),
+      bottom: 15,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(Icons.ios_share_outlined, color: Colors.white),
-            SizedBox(width: 5),
-            Text(
-              'Share',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  primary: CupertinoColors.systemGreen,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+                child: const Icon(Icons.settings, color: Colors.white),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: () => _shareAyahImage(context),
+                style: ElevatedButton.styleFrom(
+                  primary: CupertinoColors.activeGreen,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.ios_share_outlined, color: Colors.white),
+                    SizedBox(width: 5),
+                    Text(
+                      'Share',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -320,7 +347,7 @@ class ResultScreen extends StatelessWidget {
 
     final offset = Offset(
       (original.width - textPainter.width) / 2,
-      original.height - textPainter.height - 50,
+      original.height - textPainter.height - 135,
     );
 
     textPainter.paint(canvas, offset);
