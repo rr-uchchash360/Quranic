@@ -320,9 +320,7 @@ class ResultScreen extends StatelessWidget {
 
     final offset = Offset(
       (original.width - textPainter.width) / 2,
-      original.height -
-          textPainter.height -
-          50,
+      original.height - textPainter.height - 50,
     );
 
     textPainter.paint(canvas, offset);
