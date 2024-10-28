@@ -54,12 +54,13 @@ class ResultScreen extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildSurahNameSection(),
-                    const Spacer(flex: 1),
+                    const SizedBox(height: 20),
                     _buildCenteredContent(),
                     const Spacer(flex: 2),
                   ],
@@ -76,16 +77,15 @@ class ResultScreen extends StatelessWidget {
 
   Widget _buildSurahNameSection() {
     return Container(
-      margin: const EdgeInsets.only(top: 25),
-      padding: const EdgeInsets.all(7),
+      padding: const EdgeInsets.only(top: 3, bottom: 3),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withOpacity(0.7),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,
-            blurRadius: 8,
-            offset: Offset(0, 4),
+            blurRadius: 12,
+            offset: Offset(0, 6),
           ),
         ],
       ),
@@ -106,7 +106,7 @@ class ResultScreen extends StatelessWidget {
               const Text(
                 '•',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   color: Colors.white,
                 ),
               ),
@@ -114,18 +114,17 @@ class ResultScreen extends StatelessWidget {
               Text(
                 surahNameArabic,
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 26,
                   color: Colors.white,
                   fontFamily: 'Scheherazade',
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 1),
           Text(
             revelationPlace,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 15,
               color: Colors.white70,
             ),
           ),
@@ -137,15 +136,15 @@ class ResultScreen extends StatelessWidget {
   Widget _buildCenteredContent() {
     return Center(
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withOpacity(0.6),
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: Colors.black38,
               blurRadius: 12,
-              offset: Offset(0, 4),
+              offset: Offset(0, 6),
             ),
           ],
         ),
@@ -159,7 +158,7 @@ class ResultScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: const TextStyle(
-                fontSize: 32,
+                fontSize: 34,
                 color: Colors.white,
                 fontFamily: 'Scheherazade',
               ),
@@ -191,7 +190,7 @@ class ResultScreen extends StatelessWidget {
               '∼ Al-Quran ($surahNumber:$ayahNumber)',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 color: Colors.white70,
               ),
             ),
@@ -210,7 +209,7 @@ class ResultScreen extends StatelessWidget {
         child: Text(
           'Preview Mode',
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             color: Colors.white,
             fontFamily: "Roboto",
             fontWeight: FontWeight.bold,
@@ -243,7 +242,7 @@ class ResultScreen extends StatelessWidget {
               'Share',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -321,7 +320,9 @@ class ResultScreen extends StatelessWidget {
 
     final offset = Offset(
       (original.width - textPainter.width) / 2,
-      original.height - textPainter.height - 100,
+      original.height -
+          textPainter.height -
+          50,
     );
 
     textPainter.paint(canvas, offset);
