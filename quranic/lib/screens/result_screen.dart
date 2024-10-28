@@ -1,3 +1,5 @@
+// result_screen.dart
+
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -17,7 +19,7 @@ class ResultScreen extends StatelessWidget {
   final int ayahNumber;
   final bool showEnglish;
   final bool showBangla;
-  final String watermarkText; // New parameter for custom watermark text
+  final String watermarkText;
 
   ResultScreen({
     Key? key,
@@ -28,7 +30,7 @@ class ResultScreen extends StatelessWidget {
     required this.ayahNumber,
     this.showEnglish = true,
     this.showBangla = true,
-    this.watermarkText = 'Made this with Quranic', // Default value
+    this.watermarkText = 'Made this with Quranic',
   }) : super(key: key);
 
   final ScreenshotController screenshotController = ScreenshotController();
@@ -117,12 +119,55 @@ class ResultScreen extends StatelessWidget {
             ),
           ),
           Positioned(
+            bottom: 80,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                'Preview Mode',
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontFamily: "Roboto",
+                ),
+              ),
+            ),
+          ),
+          Positioned(
             bottom: 24,
             right: 24,
-            child: FloatingActionButton(
-              onPressed: () => _shareAyahImage(context),
-              backgroundColor: CupertinoColors.activeGreen,
-              child: const Icon(Icons.share, color: Colors.white),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 50,
+              decoration: BoxDecoration(
+                color: CupertinoColors.activeGreen,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ElevatedButton(
+                onPressed: () => _shareAyahImage(context),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.share, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'Share',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -162,7 +207,7 @@ class ResultScreen extends StatelessWidget {
       }
     } else if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to capture image!')),
+        const SnackBar(content: Text('Failed to render image!')),
       );
     }
   }
@@ -184,7 +229,11 @@ class ResultScreen extends StatelessWidget {
 
     final textSpan = TextSpan(
       text: watermarkText,
-      style: TextStyle(color: Colors.white, fontSize: 25, fontFamily: 'Roboto'),
+      style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.bold),
     );
     final textPainter = TextPainter(
       text: textSpan,
