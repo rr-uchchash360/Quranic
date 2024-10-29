@@ -50,6 +50,9 @@ class _ResultScreenState extends State<ResultScreen> {
   double banglaFontSize = 20;
   bool showSettings = false;
 
+  bool showEnglishTranslation = true;
+  bool showBanglaTranslation = true;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -184,7 +187,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 fontFamily: 'Scheherazade',
               ),
             ),
-            if (widget.showEnglish) ...[
+            if (showEnglishTranslation) ...[
               const SizedBox(height: 15),
               Text(
                 widget.english,
@@ -195,7 +198,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
               ),
             ],
-            if (widget.showBangla) ...[
+            if (showBanglaTranslation) ...[
               const SizedBox(height: 15),
               Text(
                 widget.bangla,
@@ -295,45 +298,36 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Widget _buildSettingsMenu() {
-    return Positioned(
-      top: 0,
-      bottom: 0,
-      right: 0,
-      width: 220,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.95),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            bottomLeft: Radius.circular(20),
-          ),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 10,
-              offset: Offset(-4, 0),
-            ),
-          ],
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 40),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  'Customization',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
+  return Positioned(
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 220,
+    child: Material(
+      color: Colors.green.withOpacity(0.95),
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 40),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Customization',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 30),
-              _buildSliderSection('Arabic', arabicFontSize, 13, 50, (value) {
+            ),
+            const SizedBox(height: 30),
+            _buildSliderSection('Arabic', arabicFontSize, 13, 50, (value) {
                 setState(() {
                   arabicFontSize = value;
                 });
@@ -360,35 +354,44 @@ class _ResultScreenState extends State<ResultScreen> {
                   banglaFontSize = 20;
                 });
               }),
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _resetFontSizes,
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    elevation: 5,
+            _buildToggleSection('Show English', showEnglishTranslation, (value) {
+              setState(() {
+                showEnglishTranslation = value;
+              });
+            }),
+            _buildToggleSection('Show Bangla', showBanglaTranslation, (value) {
+              setState(() {
+                showBanglaTranslation = value;
+              });
+            }),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: _resetFontSizes,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.green,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10, horizontal: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                  child: const Text(
-                    'Use Preset Font Size',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Use Preset Font Size',
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}
   void _resetFontSizes() {
     setState(() {
       arabicFontSize = 35;
@@ -520,6 +523,31 @@ class _ResultScreenState extends State<ResultScreen> {
     final picture = recorder.endRecording();
     return await picture.toImage(original.width, original.height);
   }
+
+  Widget _buildToggleSection(String label, bool currentValue, ValueChanged<bool> onChanged) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Switch(
+        value: currentValue,
+        onChanged: onChanged,
+        activeColor: Colors.white,
+        inactiveThumbColor: Colors.white24,
+      ),
+    ],
+  );
+}
 }
 
 
