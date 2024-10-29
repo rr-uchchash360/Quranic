@@ -53,36 +53,45 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: Stack(
-        children: [
-          Screenshot(
-            controller: screenshotController,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/background.png'),
-                  fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () {
+          if (showSettings) {
+            setState(() {
+              showSettings = false;
+            });
+          }
+        },
+        child: Stack(
+          children: [
+            Screenshot(
+              controller: screenshotController,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/background.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 65),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildSurahNameSection(),
-                    const SizedBox(height: 10),
-                    _buildCenteredContent(),
-                    const Spacer(flex: 2),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 65),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildSurahNameSection(),
+                      const SizedBox(height: 10),
+                      _buildCenteredContent(),
+                      const Spacer(flex: 2),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          _buildPreviewMode(),
-          _buildButtonRow(context),
-          if (showSettings) _buildSettingsMenu(),
-        ],
+            _buildPreviewMode(),
+            _buildButtonRow(context),
+            if (showSettings) _buildSettingsMenu(),
+          ],
+        ),
       ),
     );
   }
@@ -242,25 +251,6 @@ class _ResultScreenState extends State<ResultScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    showSettings = !showSettings;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: CupertinoColors.systemGreen,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 4,
-                ),
-                child: const Icon(Icons.settings, color: Colors.white),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ElevatedButton(
                 onPressed: () => _shareAyahImage(context),
                 style: ElevatedButton.styleFrom(
                   primary: CupertinoColors.activeGreen,
@@ -287,6 +277,25 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    showSettings = !showSettings;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: CupertinoColors.systemGreen,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+                child: const Icon(Icons.settings, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
@@ -300,71 +309,80 @@ class _ResultScreenState extends State<ResultScreen> {
       right: 0,
       width: 220,
       child: Container(
-        color: Colors.black.withOpacity(0.75),
+        decoration: BoxDecoration(
+          color: Colors.green.withOpacity(0.95),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(-4, 0),
+            ),
+          ],
+        ),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(
-                height: 50,
-              ),
-              Text('Font Sizes',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
-              SizedBox(height: 20),
-              Text('Arabic', style: TextStyle(color: Colors.white)),
-              Material(
-                child: Slider(
-                  value: arabicFontSize,
-                  min: 30,
-                  max: 50,
-                  divisions: 21,
-                  label: arabicFontSize.round().toString(),
-                  activeColor: Colors.green,
-                  inactiveColor: Colors.white70,
-                  onChanged: (value) {
-                    setState(() {
-                      arabicFontSize = value;
-                    });
-                  },
+              SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Text('English', style: TextStyle(color: Colors.white)),
-              Material(
-                child: Slider(
-                  value: englishFontSize,
-                  min: 20,
-                  max: 40,
-                  divisions: 21,
-                  label: englishFontSize.round().toString(),
-                  activeColor: Colors.green,
-                  inactiveColor: Colors.white70,
-                  onChanged: (value) {
-                    setState(() {
-                      englishFontSize = value;
-                    });
-                  },
-                ),
-              ),
-              Text('Bangla', style: TextStyle(color: Colors.white)),
-              Material(
-                child: Slider(
-                  value: banglaFontSize,
-                  min: 20,
-                  max: 40,
-                  divisions: 21,
-                  label: banglaFontSize.round().toString(),
-                  activeColor: Colors.green,
-                  inactiveColor: Colors.white70,
-                  onChanged: (value) {
-                    setState(() {
-                      banglaFontSize = value;
-                    });
-                  },
-                ),
-              ),
+              SizedBox(height: 30),
+              _buildSliderSection('Arabic', arabicFontSize, 30, 50, (value) {
+                setState(() {
+                  arabicFontSize = value;
+                });
+              }),
+              _buildSliderSection('English', englishFontSize, 20, 40, (value) {
+                setState(() {
+                  englishFontSize = value;
+                });
+              }),
+              _buildSliderSection('Bangla', banglaFontSize, 20, 40, (value) {
+                setState(() {
+                  banglaFontSize = value;
+                });
+              }),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSliderSection(String label, double value, double min, double max,
+      ValueChanged<double> onChanged) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          CupertinoSlider(
+            value: value,
+            min: min,
+            max: max,
+            divisions: (max - min).toInt(),
+            activeColor: Colors.white,
+            onChanged: onChanged,
+          ),
+        ],
       ),
     );
   }
