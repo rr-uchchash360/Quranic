@@ -11,7 +11,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final String arabic;
   final String english;
   final String bangla;
@@ -39,7 +39,16 @@ class ResultScreen extends StatelessWidget {
     required this.revelationPlace,
   }) : super(key: key);
 
+  @override
+  _ResultScreenState createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
   final ScreenshotController screenshotController = ScreenshotController();
+  double arabicFontSize = 35;
+  double englishFontSize = 20;
+  double banglaFontSize = 20;
+  bool showSettings = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +81,7 @@ class ResultScreen extends StatelessWidget {
           ),
           _buildPreviewMode(),
           _buildButtonRow(context),
+          if (showSettings) _buildSettingsMenu(),
         ],
       ),
     );
@@ -97,7 +107,7 @@ class ResultScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                surahNameTranslation,
+                widget.surahNameTranslation,
                 style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -114,7 +124,7 @@ class ResultScreen extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                surahNameArabic,
+                widget.surahNameArabic,
                 style: const TextStyle(
                   fontSize: 26,
                   color: Colors.white,
@@ -124,7 +134,7 @@ class ResultScreen extends StatelessWidget {
             ],
           ),
           Text(
-            revelationPlace,
+            widget.revelationPlace,
             style: const TextStyle(
               fontSize: 15,
               color: Colors.white70,
@@ -156,40 +166,40 @@ class ResultScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              arabic,
+              widget.arabic,
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: const TextStyle(
-                fontSize: 34,
+              style: TextStyle(
+                fontSize: arabicFontSize,
                 color: Colors.white,
                 fontFamily: 'Scheherazade',
               ),
             ),
-            if (showEnglish) ...[
+            if (widget.showEnglish) ...[
               const SizedBox(height: 15),
               Text(
-                english,
+                widget.english,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: englishFontSize,
                   color: Colors.white70,
                 ),
               ),
             ],
-            if (showBangla) ...[
+            if (widget.showBangla) ...[
               const SizedBox(height: 15),
               Text(
-                bangla,
+                widget.bangla,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
+                style: TextStyle(
+                  fontSize: banglaFontSize,
                   color: Colors.white70,
                 ),
               ),
             ],
             const SizedBox(height: 20),
             Text(
-              '∼ Al-Quran ($surahNumber:$ayahNumber)',
+              '∼ Al-Quran (${widget.surahNumber}:${widget.ayahNumber})',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 22,
@@ -232,7 +242,11 @@ class ResultScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    showSettings = !showSettings;
+                  });
+                },
                 style: ElevatedButton.styleFrom(
                   primary: CupertinoColors.systemGreen,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -279,6 +293,82 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildSettingsMenu() {
+    return Positioned(
+      top: 0,
+      bottom: 0,
+      right: 0,
+      width: 220,
+      child: Container(
+        color: Colors.black.withOpacity(0.75),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Text('Font Sizes',
+                  style: TextStyle(color: Colors.white, fontSize: 24)),
+              SizedBox(height: 20),
+              Text('Arabic', style: TextStyle(color: Colors.white)),
+              Material(
+                child: Slider(
+                  value: arabicFontSize,
+                  min: 30,
+                  max: 50,
+                  divisions: 21,
+                  label: arabicFontSize.round().toString(),
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.white70,
+                  onChanged: (value) {
+                    setState(() {
+                      arabicFontSize = value;
+                    });
+                  },
+                ),
+              ),
+              Text('English', style: TextStyle(color: Colors.white)),
+              Material(
+                child: Slider(
+                  value: englishFontSize,
+                  min: 20,
+                  max: 40,
+                  divisions: 21,
+                  label: englishFontSize.round().toString(),
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.white70,
+                  onChanged: (value) {
+                    setState(() {
+                      englishFontSize = value;
+                    });
+                  },
+                ),
+              ),
+              Text('Bangla', style: TextStyle(color: Colors.white)),
+              Material(
+                child: Slider(
+                  value: banglaFontSize,
+                  min: 20,
+                  max: 40,
+                  divisions: 21,
+                  label: banglaFontSize.round().toString(),
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.white70,
+                  onChanged: (value) {
+                    setState(() {
+                      banglaFontSize = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<Uint8List> _encodePng(ui.Image image) async {
     final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     if (byteData == null) {
@@ -291,15 +381,14 @@ class ResultScreen extends StatelessWidget {
     final Uint8List? image = await screenshotController.capture();
     if (image != null) {
       final directory = await getTemporaryDirectory();
-      final imagePath =
-          path.join(directory.path, 'Quranic_$surahNumber:$ayahNumber.png');
+      final imagePath = path.join(directory.path,
+          'Quranic_${widget.surahNumber}:${widget.ayahNumber}.png');
       final imageFile = File(imagePath);
 
       try {
         final originalImage = await _loadImage(Uint8List.fromList(image));
         final watermarkedImage =
-            await _addWatermark(originalImage, watermarkText);
-
+            await _addWatermark(originalImage, widget.watermarkText);
         await imageFile.writeAsBytes(await _encodePng(watermarkedImage));
         await Share.shareXFiles([XFile(imageFile.path)]);
       } catch (e) {
