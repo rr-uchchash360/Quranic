@@ -24,7 +24,7 @@ class ResultScreen extends StatefulWidget {
   final String surahNameTranslation;
   final String revelationPlace;
 
-  ResultScreen({
+  const ResultScreen({
     Key? key,
     required this.arabic,
     required this.english,
@@ -66,7 +66,7 @@ class _ResultScreenState extends State<ResultScreen> {
             Screenshot(
               controller: screenshotController,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/background.png'),
                     fit: BoxFit.cover,
@@ -102,7 +102,7 @@ class _ResultScreenState extends State<ResultScreen> {
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.7),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 12,
@@ -161,7 +161,7 @@ class _ResultScreenState extends State<ResultScreen> {
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.6),
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black38,
               blurRadius: 12,
@@ -206,7 +206,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
               ),
             ],
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Text(
               '∼ Al-Quran (${widget.surahNumber}:${widget.ayahNumber})',
               textAlign: TextAlign.center,
@@ -222,14 +222,14 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Widget _buildPreviewMode() {
-    return Positioned(
+    return const Positioned(
       bottom: 65,
       left: 0,
       right: 0,
       child: Center(
         child: Text(
           'Preview Mode',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             color: Colors.white,
             fontFamily: "Roboto",
@@ -260,19 +260,10 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   elevation: 4,
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Icon(Icons.ios_share_outlined, color: Colors.white),
-                    SizedBox(width: 5),
-                    Text(
-                      'Share',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -286,14 +277,15 @@ class _ResultScreenState extends State<ResultScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: CupertinoColors.systemGreen,
+                  backgroundColor: CupertinoColors.systemGreen,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 4,
                 ),
-                child: const Icon(Icons.settings, color: Colors.white),
+                child: const Icon(Icons.mode_edit_outline_rounded,
+                    color: Colors.white),
               ),
             ),
           ],
@@ -311,11 +303,11 @@ class _ResultScreenState extends State<ResultScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.green.withOpacity(0.95),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             bottomLeft: Radius.circular(20),
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 10,
@@ -327,11 +319,11 @@ class _ResultScreenState extends State<ResultScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              const SizedBox(height: 40),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
-                  'Settings',
+                  'Customization',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -340,22 +332,56 @@ class _ResultScreenState extends State<ResultScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 30),
-              _buildSliderSection('Arabic', arabicFontSize, 30, 50, (value) {
+              const SizedBox(height: 30),
+              _buildSliderSection('Arabic', arabicFontSize, 13, 50, (value) {
                 setState(() {
                   arabicFontSize = value;
                 });
+              }, () {
+                setState(() {
+                  arabicFontSize = 35;
+                });
               }),
-              _buildSliderSection('English', englishFontSize, 20, 40, (value) {
+              _buildSliderSection('English', englishFontSize, 8, 40, (value) {
                 setState(() {
                   englishFontSize = value;
                 });
+              }, () {
+                setState(() {
+                  englishFontSize = 20;
+                });
               }),
-              _buildSliderSection('Bangla', banglaFontSize, 20, 40, (value) {
+              _buildSliderSection('Bangla', banglaFontSize, 8, 40, (value) {
                 setState(() {
                   banglaFontSize = value;
                 });
+              }, () {
+                setState(() {
+                  banglaFontSize = 20;
+                });
               }),
+              const SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _resetFontSizes,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.green,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    elevation: 5,
+                  ),
+                  child: const Text(
+                    'Use Preset Font Size',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -363,23 +389,55 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
+  void _resetFontSizes() {
+    setState(() {
+      arabicFontSize = 35;
+      englishFontSize = 20;
+      banglaFontSize = 20;
+    });
+  }
+
   Widget _buildSliderSection(String label, double value, double min, double max,
-      ValueChanged<double> onChanged) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      ValueChanged<double> onChanged, VoidCallback onReset) {
+    return Material(
+      color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  '$label Font Size',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: onReset,
+                icon: const Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+                tooltip: 'Reset',
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                constraints: BoxConstraints(),
+                splashRadius: 20,
+              )
+            ],
           ),
-          CupertinoSlider(
+          Slider(
+            activeColor: Colors.white,
+            inactiveColor: Colors.white24,
             value: value,
             min: min,
             max: max,
-            divisions: (max - min).toInt(),
-            activeColor: Colors.white,
             onChanged: onChanged,
           ),
         ],
@@ -440,7 +498,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
     final textSpan = TextSpan(
       text: watermarkText,
-      style: TextStyle(
+      style: const TextStyle(
           color: Colors.white,
           fontSize: 25,
           fontFamily: 'Roboto',
@@ -463,3 +521,5 @@ class _ResultScreenState extends State<ResultScreen> {
     return await picture.toImage(original.width, original.height);
   }
 }
+
+

@@ -7,6 +7,8 @@ import '../viewmodels/quran_viewmodel.dart';
 import 'result_screen.dart';
 
 class InputScreen extends StatefulWidget {
+  const InputScreen({super.key});
+
   @override
   _InputScreenState createState() => _InputScreenState();
 }
@@ -42,14 +44,14 @@ class _InputScreenState extends State<InputScreen> {
     showCupertinoDialog(
       context: context,
       builder: (ctx) => CupertinoAlertDialog(
-        title: Text('Input Error'),
+        title: const Text('Input Error'),
         content: Text(message),
         actions: <Widget>[
           CupertinoDialogAction(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: Text('Okay'),
+            child: const Text('Okay'),
           ),
         ],
       ),
@@ -65,14 +67,14 @@ class _InputScreenState extends State<InputScreen> {
           FocusScope.of(context).unfocus();
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CupertinoTextField(
                 controller: _surahController,
                 placeholder: "Surah Number",
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 keyboardType: TextInputType.number,
                 decoration: BoxDecoration(
                   color: CupertinoColors.white,
@@ -86,11 +88,11 @@ class _InputScreenState extends State<InputScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               CupertinoTextField(
                 controller: _ayahController,
                 placeholder: "Ayah Number",
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 keyboardType: TextInputType.number,
                 decoration: BoxDecoration(
                   color: CupertinoColors.white,
@@ -104,12 +106,12 @@ class _InputScreenState extends State<InputScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Row(
                     children: [
-                      Text("Show English"),
+                      const Text("Show English"),
                       CupertinoSwitch(
                         value: _showEnglish,
                         onChanged: (value) {
@@ -120,10 +122,10 @@ class _InputScreenState extends State<InputScreen> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
-                      Text("Show Bangla"),
+                      const Text("Show Bangla"),
                       CupertinoSwitch(
                         value: _showBangla,
                         onChanged: (value) {
@@ -136,9 +138,9 @@ class _InputScreenState extends State<InputScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               _isLoading
-                  ? CupertinoActivityIndicator(radius: 15)
+                  ? const CupertinoActivityIndicator(radius: 15)
                   : GestureDetector(
                       onTap: () async {
                         HapticFeedback.mediumImpact();
@@ -167,7 +169,8 @@ class _InputScreenState extends State<InputScreen> {
                                   showEnglish: _showEnglish,
                                   showBangla: _showBangla,
                                   surahNameArabic: result['surahNameArabic']!,
-                                  surahNameTranslation: result['surahNameTranslation']!,
+                                  surahNameTranslation:
+                                      result['surahNameTranslation']!,
                                   revelationPlace: result['revelationPlace']!,
                                 ),
                               ),
@@ -193,13 +196,13 @@ class _InputScreenState extends State<InputScreen> {
                             BoxShadow(
                               color: Colors.green.withOpacity(0.3),
                               blurRadius: 8,
-                              offset: Offset(0, 4),
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         alignment: Alignment.center,
-                        child: Text(
+                        child: const Text(
                           "Get Ayah",
                           style: TextStyle(
                             color: CupertinoColors.white,
