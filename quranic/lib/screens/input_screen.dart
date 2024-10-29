@@ -107,38 +107,38 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      const Text("Show English"),
-                      CupertinoSwitch(
-                        value: _showEnglish,
-                        onChanged: (value) {
-                          setState(() {
-                            _showEnglish = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      const Text("Show Bangla"),
-                      CupertinoSwitch(
-                        value: _showBangla,
-                        onChanged: (value) {
-                          setState(() {
-                            _showBangla = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
+              // Row(
+              //   children: [
+              //     Row(
+              //       children: [
+              //         const Text("Show English"),
+              //         CupertinoSwitch(
+              //           value: _showEnglish,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               _showEnglish = value;
+              //             });
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //     const Spacer(),
+              //     Row(
+              //       children: [
+              //         const Text("Show Bangla"),
+              //         CupertinoSwitch(
+              //           value: _showBangla,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               _showBangla = value;
+              //             });
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 30),
               _isLoading
                   ? const CupertinoActivityIndicator(radius: 15)
                   : GestureDetector(

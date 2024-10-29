@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,12 +32,12 @@ class ResultScreen extends StatefulWidget {
     required this.bangla,
     required this.surahNumber,
     required this.ayahNumber,
-    this.showEnglish = true,
-    this.showBangla = true,
-    this.watermarkText = 'Made this with Quranic',
     required this.surahNameArabic,
     required this.surahNameTranslation,
     required this.revelationPlace,
+    this.showEnglish = true,
+    this.showBangla = true,
+    this.watermarkText = 'Made this with Quranic',
   }) : super(key: key);
 
   @override
@@ -52,6 +53,19 @@ class _ResultScreenState extends State<ResultScreen> {
 
   bool showEnglishTranslation = true;
   bool showBanglaTranslation = true;
+
+  File? backgroundImage; // To store the background image
+
+  Future<void> pickBackgroundImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        backgroundImage = File(image.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +83,16 @@ class _ResultScreenState extends State<ResultScreen> {
             Screenshot(
               controller: screenshotController,
               child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/background.png'),
-                    fit: BoxFit.cover,
-                  ),
+                decoration: BoxDecoration(
+                  image: backgroundImage != null
+                      ? DecorationImage(
+                          image: FileImage(backgroundImage!),
+                          fit: BoxFit.cover,
+                        )
+                      : const DecorationImage(
+                          image: AssetImage('assets/background.png'),
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -274,6 +293,24 @@ class _ResultScreenState extends State<ResultScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
+                onPressed: () => pickBackgroundImage(),
+                style: ElevatedButton.styleFrom(
+                  primary: CupertinoColors.activeGreen,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+                child: const Icon(
+                  Icons.image,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
                 onPressed: () {
                   setState(() {
                     showSettings = !showSettings;
@@ -298,36 +335,36 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Widget _buildSettingsMenu() {
-  return Positioned(
-    top: 0,
-    bottom: 0,
-    right: 0,
-    width: 220,
-    child: Material(
-      color: Colors.green.withOpacity(0.95),
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(20),
-        bottomLeft: Radius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Customization',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+    return Positioned(
+      top: 0,
+      bottom: 0,
+      right: 0,
+      width: 220,
+      child: Material(
+        color: Colors.green.withOpacity(0.95),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 40),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Customization',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 30),
-            _buildSliderSection('Arabic', arabicFontSize, 13, 50, (value) {
+              const SizedBox(height: 20),
+              _buildSliderSection('Arabic', arabicFontSize, 13, 50, (value) {
                 setState(() {
                   arabicFontSize = value;
                 });
@@ -354,44 +391,68 @@ class _ResultScreenState extends State<ResultScreen> {
                   banglaFontSize = 20;
                 });
               }),
-            _buildToggleSection('Show English', showEnglishTranslation, (value) {
-              setState(() {
-                showEnglishTranslation = value;
-              });
-            }),
-            _buildToggleSection('Show Bangla', showBanglaTranslation, (value) {
-              setState(() {
-                showBanglaTranslation = value;
-              });
-            }),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: _resetFontSizes,
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.green,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10, horizontal: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
+              const SizedBox(height: 10),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _resetFontSizes,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.green,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    elevation: 5,
                   ),
-                  elevation: 5,
-                ),
-                child: const Text(
-                  'Use Preset Font Size',
-                  style: TextStyle(
-                    fontSize: 15,
+                  child: const Text(
+                    'Use Preset Font Size',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              _buildToggleSection('Show English', showEnglishTranslation,
+                  (value) {
+                setState(() {
+                  showEnglishTranslation = value;
+                });
+              }),
+              _buildToggleSection('Show Bangla', showBanglaTranslation,
+                  (value) {
+                setState(() {
+                  showBanglaTranslation = value;
+                });
+              }),
+              Center(
+                child: ElevatedButton(
+                  onPressed: pickBackgroundImage,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.green,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    elevation: 5,
+                  ),
+                  child: const Text(
+                    'Pick Background Image',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
+
   void _resetFontSizes() {
     setState(() {
       arabicFontSize = 35;
@@ -524,30 +585,29 @@ class _ResultScreenState extends State<ResultScreen> {
     return await picture.toImage(original.width, original.height);
   }
 
-  Widget _buildToggleSection(String label, bool currentValue, ValueChanged<bool> onChanged) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+  Widget _buildToggleSection(
+      String label, bool currentValue, ValueChanged<bool> onChanged) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      Switch(
-        value: currentValue,
-        onChanged: onChanged,
-        activeColor: Colors.white,
-        inactiveThumbColor: Colors.white24,
-      ),
-    ],
-  );
+        Switch(
+          value: currentValue,
+          onChanged: onChanged,
+          activeColor: Colors.white,
+          inactiveThumbColor: Colors.white24,
+        ),
+      ],
+    );
+  }
 }
-}
-
-
